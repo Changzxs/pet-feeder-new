@@ -1,0 +1,162 @@
+.pet-feeder {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #0a2c61;
+  background-image: url("../assets/DogImage.jpg"); // Ensure the correct path
+  background-size: cover; // ✅ Make sure the image covers the entire screen
+  background-position: center; // ✅ Center the image properly
+  background-repeat: no-repeat; // ✅ Prevent repeating
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 30px; 
+
+  h3 {
+    margin: 20px 0;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .schedule {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+
+    input {
+      padding: 10px;
+      font-size: 1.2rem;
+      border: 2px solid #0a2c61;
+      border-radius: 8px;
+      outline: none;
+      width: 150px;
+      background: white;
+      color: #0a2c61;
+    }
+
+    .feed-btn {
+      background-color: #f79c19;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: 0.3s ease-in-out;
+
+      &:hover {
+        background-color: #d68217;
+      }
+    }
+  }
+
+  .auto-feeds {
+    margin-bottom: 20px;
+
+    .feed-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px 0;
+      font-size: 1.5rem;
+      padding: 10px;
+      border-radius: 10px;
+
+      span {
+        width: 100px;
+        font-weight: bold;
+      }
+
+      input {
+        width: 70px;
+        font-size: 1.3rem;
+        text-align: center;
+        border: 2px solid #0a2c61;
+        border-radius: 8px;
+        outline: none;
+        padding: 8px;
+        color: #0a2c61;
+      }
+
+      .plus, .minus {
+        background-color: #0a2c61;
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+
+        &:hover {
+          background-color: #08204d;
+        }
+      }
+
+      .minus {
+        background-color: #f79c19;
+
+        &:hover {
+          background-color: #d68217;
+        }
+      }
+
+      .days-input {
+        width: 60px;
+        font-size: 1.2rem;
+        text-align: center;
+        border: 2px solid #0a2c61;
+        border-radius: 8px;
+        outline: none;
+        padding: 6px;
+        background: white;
+        color: #0a2c61;
+      }
+
+      .schedule-btn {
+        background-color: #0a2c61;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s;
+
+        &:hover {
+          background-color: #08204d;
+        }
+      }
+    }
+  }
+
+  .feed-now-btn {
+    background-color: #0a2c61;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px; 
+
+    &:hover {
+      background-color: #08204d;
+    }
+  }
+}
