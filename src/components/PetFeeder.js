@@ -11,6 +11,8 @@ const PetFeeder = () => {
     { time: "6:00 PM", amount: 2, days: 7 },
   ]);
 
+  const [dogSize, setDogSize] = useState("Small");
+
   const handleIncrease = (index) => {
     const newFeeds = [...autoFeeds];
     newFeeds[index].amount += 1;
@@ -25,8 +27,21 @@ const PetFeeder = () => {
     }
   };
 
-  const handleFeedNow = () => {
-    alert("Feeding Now! 🐾"); // Replace with actual feeding logic
+  const handleFeedNow = async () => {
+    try {
+      const response = await fetch("http://192.168.1.200/feed-now", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        alert("Feeding Now! 🐾");
+      } else {
+        alert("Failed to feed.");
+      }
+    } catch (error) {
+      console.error("Error sending feed request:", error);
+      alert("Error connecting to feeder.");
+    }
   };
 
   const handleDaysChange = (index, newDays) => {
@@ -35,13 +50,48 @@ const PetFeeder = () => {
     setAutoFeeds(newFeeds);
   };
 
+  const handleSizeChange = (event) => {
+    setDogSize(event.target.value);
+  };
+
+  const updateDogSize = async () => {
+    try {
+      const response = await fetch("http://your-arduino-ip/update-size", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ size: dogSize }),
+      });
+
+      if (response.ok) {
+        alert("Dog size updated successfully!");
+      } else {
+        alert("Failed to update dog size.");
+      }
+    } catch (error) {
+      console.error("Error updating size:", error);
+    }
+  };
+
   return (
     <div className="pet-feeder">
       <h3>Schedule Feeding</h3>
-      <div className="schedule">
-        <input type="time" />
-        <input type="number" placeholder="Amount" />
-        <button className="feed-btn">Feed Now</button>
+      <div className="top-section">
+        {/* ✅ Dog Size Selection (Aligned with Schedule Feeding) */}
+        <div className="dog-size-selection">
+          <label>Dog Size:</label>
+          <select value={dogSize} onChange={handleSizeChange}>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+          </select>
+          <button className="update-btn" onClick={updateDogSize}>Update</button>
+        </div>
+
+        {/* ✅ Schedule Feeding (Without Amount Input) */}
+        <div className="schedule">
+          <input type="time" />
+          <button className="feed-btn">Schedule Now</button>
+        </div>
       </div>
 
       <h3>Auto Feed Times:</h3>
@@ -65,7 +115,7 @@ const PetFeeder = () => {
         ))}
       </div>
 
-      {/* ✅ Add the "Feed Now" Button Below */}
+      {/* ✅ "Feed Now" Button - Works with Arduino R4 WiFi */}
       <button className="feed-now-btn" onClick={handleFeedNow}>
         Feed Now
       </button>
