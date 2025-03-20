@@ -6,57 +6,18 @@ import dogImage from "../assets/DogImage.jpg";
 
 const PetFeeder = () => {
   const [autoFeeds, setAutoFeeds] = useState([
-    { time: "7:00 AM", amount: 8, days: 7 }, // Default: 7 days
-    { time: "12:00 PM", amount: 2, days: 7 },
-    { time: "6:00 PM", amount: 2, days: 7 },
+    { time: "7:00 AM", days: 7 }, // Default: 7 days
+    { time: "12:00 PM", days: 7 },
+    { time: "6:00 PM", days: 7 },
   ]);
 
   const [dogSize, setDogSize] = useState("Small");
+  const apiUrl = "http://192.168.1.200"; // Replace with your Arduino R4 WiFi IP
 
-  const handleIncrease = (index) => {
-    const newFeeds = [...autoFeeds];
-    newFeeds[index].amount += 1;
-    setAutoFeeds(newFeeds);
-  };
-
-  const handleDecrease = (index) => {
-    const newFeeds = [...autoFeeds];
-    if (newFeeds[index].amount > 0) {
-      newFeeds[index].amount -= 1;
-      setAutoFeeds(newFeeds);
-    }
-  };
-
-  const handleFeedNow = async () => {
-    try {
-      const response = await fetch("http://192.168.1.200/feed-now", {
-        method: "POST",
-      });
-
-      if (response.ok) {
-        alert("Feeding Now! 🐾");
-      } else {
-        alert("Failed to feed.");
-      }
-    } catch (error) {
-      console.error("Error sending feed request:", error);
-      alert("Error connecting to feeder.");
-    }
-  };
-
-  const handleDaysChange = (index, newDays) => {
-    const newFeeds = [...autoFeeds];
-    newFeeds[index].days = newDays;
-    setAutoFeeds(newFeeds);
-  };
-
-  const handleSizeChange = (event) => {
-    setDogSize(event.target.value);
-  };
-
+  // ✅ Function to send dog size update to Arduino R4 WiFi
   const updateDogSize = async () => {
     try {
-      const response = await fetch("http://your-arduino-ip/update-size", {
+      const response = await fetch(`${apiUrl}/update-size`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ size: dogSize }),
@@ -72,6 +33,51 @@ const PetFeeder = () => {
     }
   };
 
+  // ✅ Function to send "Feed Now" command to Arduino R4 WiFi
+  const handleFeedNow = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/feed-now`, {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        alert("Feeding Now! 🐾");
+      } else {
+        alert("Failed to feed.");
+      }
+    } catch (error) {
+      console.error("Error sending feed request:", error);
+      alert("Error connecting to feeder.");
+    }
+  };
+
+  // ✅ Function to schedule feeding on Arduino R4 WiFi
+  const handleScheduleFeed = async (time, days) => {
+    try {
+      const response = await fetch(`${apiUrl}/schedule-feed`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ time, days }),
+      });
+
+      if (response.ok) {
+        alert(`Feeding scheduled at ${time} for ${days} days!`);
+      } else {
+        alert("Failed to schedule feeding.");
+      }
+    } catch (error) {
+      console.error("Error scheduling feeding:", error);
+      alert("Error connecting to feeder.");
+    }
+  };
+
+  // ✅ Function to update scheduled days
+  const handleDaysChange = (index, newDays) => {
+    const newFeeds = [...autoFeeds];
+    newFeeds[index].days = newDays;
+    setAutoFeeds(newFeeds);
+  };
+
   return (
     <div className="pet-feeder">
       <h3>Schedule Feeding</h3>
@@ -79,18 +85,28 @@ const PetFeeder = () => {
         {/* ✅ Dog Size Selection (Aligned with Schedule Feeding) */}
         <div className="dog-size-selection">
           <label>Dog Size:</label>
-          <select value={dogSize} onChange={handleSizeChange}>
+          <select value={dogSize} onChange={(e) => setDogSize(e.target.value)}>
             <option value="Small">Small</option>
             <option value="Medium">Medium</option>
             <option value="Large">Large</option>
           </select>
-          <button className="update-btn" onClick={updateDogSize}>Update</button>
+          <button className="update-btn" onClick={updateDogSize}>
+            Update
+          </button>
         </div>
 
-        {/* ✅ Schedule Feeding (Without Amount Input) */}
+        {/* ✅ Schedule Feeding (With Working Connection) */}
         <div className="schedule">
-          <input type="time" />
-          <button className="feed-btn">Schedule Now</button>
+          <input type="time" id="customTime" />
+          <button
+            className="feed-btn"
+            onClick={() => {
+              const time = document.getElementById("customTime").value;
+              handleScheduleFeed(time, 1); // Default 1 day for manual scheduling
+            }}
+          >
+            Schedule Now
+          </button>
         </div>
       </div>
 
@@ -98,10 +114,7 @@ const PetFeeder = () => {
       <div className="auto-feeds">
         {autoFeeds.map((feed, index) => (
           <div key={index} className="feed-item">
-            <span>{feed.time}</span>
-            <input type="number" value={feed.amount} readOnly />
-            <button className="plus" onClick={() => handleIncrease(index)}>+</button>
-            <button className="minus" onClick={() => handleDecrease(index)}>-</button>
+             <span>{feed.time}</span>
 
             {/* ✅ New Input for Scheduling Days */}
             <input
@@ -110,7 +123,12 @@ const PetFeeder = () => {
               onChange={(e) => handleDaysChange(index, Number(e.target.value))}
               className="days-input"
             />
-            <button className="schedule-btn">Set Days</button>
+            <button
+              className="schedule-btn"
+              onClick={() => handleScheduleFeed(feed.time, feed.days)}
+            >
+              Set Days
+            </button>
           </div>
         ))}
       </div>
