@@ -25,11 +25,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px; // Reduced gap for a compact layout
+    gap: 15px;
     margin-bottom: 20px;
   }
 
-  // ✅ Dog Size Selection - Now properly aligned
+  // ✅ Dog Size Selection
   .dog-size-selection {
     display: flex;
     align-items: center;
@@ -50,8 +50,8 @@
       background: white;
       color: #0a2c61;
       cursor: pointer;
-      width: 120px; // Ensuring consistent width
-      height: 45px; // Same height as buttons
+      width: 120px;
+      height: 45px;
     }
 
     .update-btn {
@@ -64,7 +64,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: 0.3s;
-      height: 45px; // Same height as input field
+      height: 45px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -75,7 +75,7 @@
     }
   }
 
-  // ✅ Schedule Time Input + Feed Now (Aligned)
+  // ✅ Schedule Time Input
   .schedule {
     display: flex;
     align-items: center;
@@ -90,7 +90,7 @@
       width: 140px;
       background: white;
       color: #0a2c61;
-      height: 45px; // Same height as buttons
+      height: 45px;
       text-align: center;
     }
 
@@ -104,7 +104,7 @@
       font-size: 1.2rem;
       font-weight: bold;
       transition: 0.3s;
-      height: 45px; // Ensuring equal button size
+      height: 45px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -115,83 +115,63 @@
     }
   }
 
-  // ✅ Auto Feed Times - Properly Aligned
+  // ✅ Auto Feed Times - Properly Styled ON/OFF Buttons
   .auto-feeds {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 
     .feed-item {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin: 10px 0;
-      font-size: 1.5rem;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-radius: 10px;
+      width: 280px;
 
       span {
-        width: 100px;
-        font-weight: bold;
-      }
-
-      input {
-        width: 70px;
-        font-size: 1.3rem;
-        text-align: center;
-        border: 2px solid #0a2c61;
-        border-radius: 8px;
-        outline: none;
-        padding: 8px;
-        color: #0a2c61;
-        height: 45px;
-      }
-
-      .plus, .minus {
-        background-color: #0a2c61;
-        color: white;
-        border: none;
-        padding: 10px;
         font-size: 1.5rem;
-        cursor: pointer;
-        border-radius: 8px;
-        width: 45px;
-        height: 45px; // Matching all other buttons
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: 0.3s;
+         font-weight: bold;
+        color: #0a2c61;
+       }
 
-        &:hover {
-          background-color: #08204d;
-        }
-      }
-
-      .minus {
-        background-color: #f79c19;
-
-        &:hover {
-          background-color: #d68217;
-        }
-      }
-
-      .schedule-btn {
-        background-color: #0a2c61;
-        color: white;
+      .on-btn,
+      .off-btn {
         border: none;
-        padding: 10px 15px;
-        font-size: 1rem;
-        cursor: pointer;
-        border-radius: 8px;
+        font-size: 1.2rem;
         font-weight: bold;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
         transition: 0.3s;
-        height: 45px; // Ensuring equal button height
+        height: 45px;
+        display: flex;
+        align-items: center;
+         justify-content: center;
+      }
+
+      .on-btn {
+        background-color: #28a745;
+        color: white;
 
         &:hover {
-          background-color: #08204d;
+          background-color: #218838;
+        }
+      }
+
+      .off-btn {
+        background-color: #dc3545;
+         color: white;
+
+        &:hover {
+          background-color: #c82333;
         }
       }
     }
   }
 
-  // ✅ Feed Now Button (Same Size as Others)
+  // ✅ Feed Now Button
   .feed-now-btn {
     background-color: #0a2c61;
     color: white;
@@ -203,7 +183,7 @@
     cursor: pointer;
     transition: 0.3s;
     margin-top: 15px;
-    height: 45px; // Matching other buttons
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
