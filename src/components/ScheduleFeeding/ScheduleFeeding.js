@@ -1,20 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ScheduleFeeding.scss';
 
 const FeedingSchedule = () => {
-  const [autoFeeds, setAutoFeeds] = useState([
-    { id: 1, time: '7:00 AM', enabled: true },
-    { id: 2, time: '12:00 PM', enabled: true },
-    { id: 3, time: '6:00 PM', enabled: true }
-  ]);
+  // Load from localStorage if available
+  const [autoFeeds, setAutoFeeds] = useState(() => {
+    const saved = localStorage.getItem('autoFeeds');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, time: '7:00 AM', enabled: true },
+      { id: 2, time: '12:00 PM', enabled: true },
+      { id: 3, time: '6:00 PM', enabled: true }
+    ];
+  });
 
   const apiUrl = "http://192.168.0.117"; // Arduino R4 WiFi IP
+
+  // Save to localStorage whenever autoFeeds changes
+  useEffect(() => {
+    localStorage.setItem('autoFeeds', JSON.stringify(autoFeeds));
+  }, [autoFeeds]);
 
   const toggleAutoFeed = async (id) => {
     const updatedFeeds = autoFeeds.map(feed =>
       feed.id === id ? { ...feed, enabled: !feed.enabled } : feed
     );
+    
+    // Optimistic UI update
     setAutoFeeds(updatedFeeds);
 
     try {
@@ -30,12 +41,20 @@ const FeedingSchedule = () => {
         body: JSON.stringify(scheduleData),
       });
 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
       const data = await response.json();
       if (data.status !== "success") {
+        // Revert if API call fails
+        setAutoFeeds(autoFeeds);
         alert("❌ Failed to update feed schedule");
       }
     } catch (error) {
       console.error("Error toggling feed:", error);
+      // Revert on error
+      setAutoFeeds(autoFeeds);
       alert("❌ Error connecting to feeder");
     }
   };
@@ -71,8 +90,8 @@ const FeedingSchedule = () => {
         <div className="divider"></div>
 
         <div className="button-group">
-          <Link to="/dog-sizes" className="primary-button">⬅ Back to Dog Sizes  </Link>
-          <Link to="/auto-feed-times" className="secondary-button">Continue to auto-Schedule ➡ </Link>
+          <Link to="/dog-sizes" className="primary-button">⬅ Back to Dog Sizes</Link>
+          <Link to="/auto-feed-times" className="secondary-button">Continue to auto-Schedule ➡</Link>
         </div>
       </div>
     </div>
